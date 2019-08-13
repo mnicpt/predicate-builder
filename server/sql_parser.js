@@ -8,6 +8,18 @@ const expression_translations = {
   in_list: 'IN'
 };
 
+const parseValue = (query) => {
+  let value = Array.isArray(query.value) ? query.value.join(' AND ') : query.value;
+
+  if (query.condition === 'in_list') {
+    value = `(${value})`;
+  } else if (query.condition === 'starts_with') {
+    value = `(${value}%)`;
+  }
+
+  return value;
+};
+
 const SQLParser = (table_name, queries) => {
   let columns = [];
   let expression = '';
@@ -15,15 +27,12 @@ const SQLParser = (table_name, queries) => {
   queries.forEach((query, index) => {
     columns.push(query.name);
 
-    const value = Array.isArray(query.value) ? query.value.join(' AND ') : query.value;
+    let value = parseValue(query);
+
     if (index === 0) {
       expression += `${query.name} ${expression_translations[query.condition]} ${value} `;
     } else {
-      if (query.condition === 'in_list') {
-        expression += `AND ${query.name} ${expression_translations[query.condition]} (${value}) `;
-      } else {
-        expression += `AND ${query.name} ${expression_translations[query.condition]} ${value} `;
-      }
+      expression += `AND ${query.name} ${expression_translations[query.condition]} ${value} `;
     }
   });
 
