@@ -27,9 +27,20 @@ const QueryBuilder = ({ names, conditions }) => {
   return (
     <div className='query-builder'>
       {queries.map((query, index) =>
-        <div className='query-row'>
-          <DeleteButton key={index} id={index} className={queries.length - 1 === index ? 'current' : ''} disabled={queries.length - 1 === index ? false : true} onClick={deleteQuery} />
-          <Query key={query.name + index} name={query.name} type={query.type} condition={query.condition} value={query.value} />
+        <div key={'row' + index} className='query-row'>
+          <DeleteButton
+            key={index}
+            className={queries.length - 1 === index ? 'current' : ''}
+            disabled={queries.length - 1 === index ? false : true}
+            onClick={deleteQuery}
+          />
+          <Query
+            key={query.name + index}
+            name={query.name}
+            type={query.type}
+            condition={query.condition}
+            value={query.value}
+          />
         </div>
       )}
     </div>
