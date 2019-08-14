@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Query from '../Query';
+import AddButton from '../AddButton';
 import DeleteButton from '../DeleteButton';
+import SearchButton from '../SearchButton';
 import './QueryBuilder.scss';
 
 const QueryBuilder = () => {
@@ -18,6 +20,15 @@ const QueryBuilder = () => {
       value: 'M'
     }
   ]);
+
+  const addQuery = () => {
+    setQueries([...queries, {
+      name: 'user_first_name',
+      type: 'string',
+      condition: '',
+      value: ''
+    }])
+  };
 
   const updateQuery = (id, query) => {
     setQueries(queries.map((existingQuery, index) => {
@@ -54,6 +65,11 @@ const QueryBuilder = () => {
           />
         </div>
       )}
+      <AddButton onClick={addQuery} />
+      <footer>
+        <div className='query-result'>Query result: SELECT ... FROM ... WHERE ...</div>
+        <SearchButton />
+      </footer>
     </div>
   );
 };
