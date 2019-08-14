@@ -1,18 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NameSelect from '../NameSelect';
 import ConditionSelect from '../ConditionSelect';
+import ValueInput from '../ValueInput';
 import './Query.scss';
 
-const Query = ({ name, type, condition, value }) => {
-  const [selectedName, setSelectedName] = useState(name);
+const Query = ({ id, name, type, condition, value, updateQuery }) => {
   const nameChanged = (e) => {
-    setSelectedName(e.target.value);
+    updateQuery(id, {
+      name: e.target.value,
+      type,
+      condition,
+      value
+    })
   };
+
+  const conditionChanged = (e) => {
+    updateQuery(id, {
+      name,
+      type,
+      condition: e.target.value,
+      value
+    });
+  };
+
+  const valueChanged = (e) => {
+    updateQuery(id, {
+      name,
+      type,
+      condition,
+      value: e.target.value
+    });
+  }
 
   return (
     <div className='query'>
-      <NameSelect name={selectedName} onChange={nameChanged} />
-      <ConditionSelect name={selectedName} condition={condition} />
+      <NameSelect name={name} onChange={nameChanged} />
+      <ConditionSelect name={name} condition={condition} onChange={conditionChanged} />
+      <ValueInput condition={condition} value={value} onChange={valueChanged} />
     </div>
   );
 };

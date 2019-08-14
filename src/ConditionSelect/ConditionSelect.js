@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import conditions from './conditions';
 import names from '../NameSelect/names';
 
-const ConditionSelect = ({ name, condition }) => {
-  const [selectedCondition, setSelectedCondition] = useState(condition);
-
+const ConditionSelect = ({ name, condition, onChange }) => {
   const conditionOptions = conditions[names[name]].map(condition => <option key={condition} value={condition}>{condition}</option>);
-  const conditionChanged = (e) => {
-    setSelectedCondition(e.target.value);
-  };
+
   return (
-    <select value={selectedCondition} onChange={conditionChanged}>
+    <select value={condition} onChange={onChange}>
       {conditionOptions}
     </select>
   );

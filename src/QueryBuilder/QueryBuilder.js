@@ -3,7 +3,7 @@ import Query from '../Query';
 import DeleteButton from '../DeleteButton';
 import './QueryBuilder.scss';
 
-const QueryBuilder = ({ names, conditions }) => {
+const QueryBuilder = () => {
   const [queries, setQueries] = useState([
     {
       name: 'user_first_name',
@@ -19,9 +19,18 @@ const QueryBuilder = ({ names, conditions }) => {
     }
   ]);
 
+  const updateQuery = (id, query) => {
+    setQueries(queries.map((existingQuery, index) => {
+      if (id === index) {
+        return query;
+      } else {
+        return existingQuery;
+      }
+    }));
+  };
+
   const deleteQuery = (e) => {
-    queries.pop();
-    setQueries(queries);
+    setQueries(queries.slice(0, queries.length - 1));
   };
 
   return (
@@ -29,17 +38,19 @@ const QueryBuilder = ({ names, conditions }) => {
       {queries.map((query, index) =>
         <div key={'row' + index} className='query-row'>
           <DeleteButton
-            key={index}
+            key={'btn' + index}
             className={queries.length - 1 === index ? 'current' : ''}
             disabled={queries.length - 1 === index ? false : true}
             onClick={deleteQuery}
           />
           <Query
             key={query.name + index}
+            id={index}
             name={query.name}
             type={query.type}
             condition={query.condition}
             value={query.value}
+            updateQuery={updateQuery}
           />
         </div>
       )}
