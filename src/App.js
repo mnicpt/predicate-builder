@@ -1,7 +1,5 @@
 import React from 'react';
 import './App.scss';
-import names from './names';
-import conditions from './conditions';
 import QueryBuilder from './QueryBuilder';
 
 function App() {
@@ -11,7 +9,7 @@ function App() {
         <h1>Search for Sessions</h1>
       </header>
       <main>
-        <QueryBuilder names={names} conditions={conditions} />
+        <QueryBuilder />
       </main>
     </div>
   );

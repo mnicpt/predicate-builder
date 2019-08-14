@@ -1,5 +1,5 @@
 const conditions = {
-  numbers: [
+  number: [
     'equals',
     'between',
     'greater_than',
