@@ -6,27 +6,20 @@ import SearchButton from '../SearchButton';
 import './QueryBuilder.scss';
 
 const QueryBuilder = () => {
-  const [queries, setQueries] = useState([
-    {
-      name: 'user_first_name',
-      type: 'string',
-      condition: 'equals',
-      value: 'Steve'
-    },
-    {
-      name: 'user_last_name',
-      type: 'string',
-      condition: 'starts_with',
-      value: 'M'
-    }
-  ]);
+  const [queries, setQueries] = useState([{
+    name: 'user_first_name',
+    type: 'string',
+    condition: 'equals',
+    value: ['']
+  }]);
+  const [statement, setStatement] = useState('');
 
   const addQuery = () => {
     setQueries([...queries, {
       name: 'user_first_name',
       type: 'string',
-      condition: '',
-      value: ''
+      condition: 'equals',
+      value: ['']
     }])
   };
 
@@ -44,6 +37,20 @@ const QueryBuilder = () => {
     setQueries(queries.slice(0, queries.length - 1));
   };
 
+  const search = (e) => {
+    fetch('http://localhost:4000/api/v1/query', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(queries)
+    })
+      .then(response => response.text())
+      .then(body => setStatement(body))
+      .catch(error => console.error('Error: ', error));
+  };
+
   return (
     <div className='query-builder'>
       {queries.map((query, index) =>
@@ -51,7 +58,7 @@ const QueryBuilder = () => {
           <DeleteButton
             key={'btn' + index}
             className={queries.length - 1 === index ? 'current' : ''}
-            disabled={queries.length - 1 === index ? false : true}
+            disabled={queries.length - 1 === index && queries.length !== 1 ? false : true}
             onClick={deleteQuery}
           />
           <Query
@@ -67,8 +74,8 @@ const QueryBuilder = () => {
       )}
       <AddButton onClick={addQuery} />
       <footer>
-        <div className='query-result'>Query result: SELECT ... FROM ... WHERE ...</div>
-        <SearchButton />
+        <div className='query-result'><b>Query result: </b><br />{statement}</div>
+        <SearchButton onClick={search} />
       </footer>
     </div>
   );

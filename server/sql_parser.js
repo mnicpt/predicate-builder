@@ -1,6 +1,6 @@
 const expression_translations = {
   equals: '=',
-  contains: '',
+  contains: 'LIKE',
   starts_with: 'LIKE',
   between: 'BETWEEN',
   greater_than: '>',

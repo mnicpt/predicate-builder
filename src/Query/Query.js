@@ -15,20 +15,39 @@ const Query = ({ id, name, type, condition, value, updateQuery }) => {
   };
 
   const conditionChanged = (e) => {
+    const updatedCondition = e.target.value;
+    let updatedValue = value;
+    if (updatedCondition !== 'between') {
+      updatedValue.length = 1;
+    }
+
     updateQuery(id, {
       name,
       type,
-      condition: e.target.value,
-      value
+      condition: updatedCondition,
+      value: updatedValue
     });
   };
 
-  const valueChanged = (e) => {
+  const firstValueChanged = (e) => {
+    const updatedValue = value.length > 1 ? [e.target.value, value[1]] : [e.target.value];
+
     updateQuery(id, {
       name,
       type,
       condition,
-      value: e.target.value
+      value: updatedValue
+    });
+  }
+
+  const secondValueChanged = (e) => {
+    const updatedValue = [value[0], e.target.value];
+
+    updateQuery(id, {
+      name,
+      type,
+      condition,
+      value: updatedValue
     });
   }
 
@@ -36,7 +55,7 @@ const Query = ({ id, name, type, condition, value, updateQuery }) => {
     <div className='query'>
       <NameSelect name={name} onChange={nameChanged} />
       <ConditionSelect name={name} condition={condition} onChange={conditionChanged} />
-      <ValueInput condition={condition} value={value} onChange={valueChanged} />
+      <ValueInput condition={condition} value={value} firstValOnChange={firstValueChanged} secondValOnChange={secondValueChanged} />
     </div>
   );
 };
